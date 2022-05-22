@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        ToDo App
+    </title>
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <!-- bootsrap cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link
+        href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css"
+        rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- home css -->
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body>
+    <!-- outer container -->
+    <div class="container">
+        <!-- form for taking notes -->
+        <div class="card mt-3">
+            <!-- heading of form -->
+            <h1 class="card-header text-center">
+                <%= title %>
+            </h1>
+            <div class="card-body text-center">
+                <form action="/create-task-list" method="POST">
+                    <!-- input for heading -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInput" name="heading"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                            title="Write the heading of your note">
+                        <label for="floatingInput">Heading</label>
+                    </div>
+                    <!-- textarea for description -->
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"
+                            name="description"></textarea>
+                        <label for="floatingTextarea">✍🏻 Description</label>
+                    </div>
+                    <!-- select item for category -->
+                    <div class="row mt-3">
+                        <div class="form-floating col-md ">
+                            <select name="category" class="form-select" id="floatingSelect"
+                                aria-label="Floating label select example">
+                                <option selected>Select type of Note</option>
+                                <option value="School">School🏫</option>
+                                <option value="Grocery">Grocery🛒</option>
+                                <option value="Work">Work💻</option>
+                            </select>
+                            <label for="floatingSelect"> &nbsp;&nbsp;&nbsp;Category</label>
+                        </div>
+                        <!-- date picker  -->
+                        <div class="col-md">
+                            <div class="ui calendar" id="example1">
+                                <div class="ui input left icon" style="width: 100%;height: 50px;">
+                                    <i class="calendar icon"></i>
+                                    <input name="date" type="text" placeholder="Date/Time">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- submit button -->
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-outline-success me-2" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-custom-class="custom-tooltip"
+                            title="click to add notes to the database"><i class="fa-solid fa-plus"></i>
+                            Add Task</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <hr>
+        <!-- search bar for searching notes -->
+        <nav class="navbar bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand">Your Notes</a>
+                <form class="d-flex" role="search">
+                    <input id="searchTxt" class="form-control me-2" type="search" placeholder="Search"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+        <hr>
+        <!-- Notes -->
+        <ul class="p-0" style="list-style: none; ">
+            <!-- filling note from database -->
+            <% for(let i of note_list){ %>
+                <li>
+                    <div class="card text-center mx-2 mb-4 note-card ">
+                        <!-- heading of notes -->
+                        <div class=" card-header">
+                            <h2>
+                                <%= i.heading %>
+
+                            </h2>
+                        </div>
+                        <!-- description of notes -->
+                        <div class="card-body">
+                            <p class="card-text description">
+                                <%= i.description%>
+                            </p>
+                        </div>
+                        <!-- dates and category tag -->
+                        <div class="card-footer text-muted">
+                            <div class="row">
+                                <!-- created date -->
+                                <div class="col"><span><strong>Created Date</strong><br>
+                                        <%= i.createdOn %>
+                                    </span></div>
+                                <!-- caetory badge -->
+                                <div class="col mt-2">
+                                    <span class="badge  bg-<%=i.tag %>">
+                                        <%= i.category %>
+                                    </span>
+                                </div>
+                                <!-- due date -->
+                                <div class="col"><span><strong>Due Date</strong><br>
+                                        <%= i.date %>
+                                    </span></div>
+                            </div>
+                        </div>
+                        <!-- delete button with delete link for nodejs -->
+                        <div class="card-footer text-muted delete">
+                            <a href="/delete-note/?id=<%= i._id%>" class="btn btn-outline-danger"><i
+                                    class="fa-solid fa-trash"></i> Delete Task</a>
+                        </div>
+                    </div>
+                </li>
+                <% } %>
+
+        </ul>
+
+    </div>
+    <!-- boot strape cdn -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script
+        src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+    <!-- date picker js file-->
+    <script src="/js/date_picker.js"></script>
+    <!-- home js file -->
+    <script src="/js/home.js"></script>
+</body>
+
+</html>

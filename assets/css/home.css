@@ -1,0 +1,12 @@
+/* ul styling */
+ul {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+/* note card styling */
+.note-card {
+    width: 550px;
+}
